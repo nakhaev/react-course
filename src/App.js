@@ -1,7 +1,10 @@
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import config from './config';
 
 function App() {
+  const {apiUrl} = config;
+
   return (
     <div className="App">
       <header className="App-header">
@@ -17,6 +20,7 @@ function App() {
         >
           Learn React
         </a>
+        <p>{apiUrl}</p>
       </header>
     </div>
   );

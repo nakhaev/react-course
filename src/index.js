@@ -6,10 +6,12 @@ import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App title={'I am from props!'}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
+
+//ReactDOM.render(<App title={'I am from props!'} />, document.getElementById('root'));
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

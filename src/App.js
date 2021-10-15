@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.scss';
 import config from './config';
+import LifeCycles from './LifeCycles';
 
 function App() {
   const {apiUrl} = config;
@@ -21,6 +22,7 @@ function App() {
           Learn React
         </a>
         <p>{apiUrl}</p>
+        <LifeCycles />
       </header>
     </div>
   );

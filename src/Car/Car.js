@@ -57,6 +57,8 @@ class Car extends React.Component {
     const style = {
       border: '1px solid #ccc',
       boxShadow: '0 4px 5px 0 rgba(0, 0, 0, .14)',
+      marginBottom: '20px',
+      padding: '8px',
       ':hover': {
         border: '1px solid #aaa',
         boxShadow: '0 4px 15px 0 rgba(0, 0, 0, .25)',
@@ -80,4 +82,4 @@ class Car extends React.Component {
   }
 }
 
-export default Car
+export default Car;

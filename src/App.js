@@ -3,6 +3,7 @@ import './App.scss'
 import Car from './Car/Car'
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
 import Counter from './Counter/Counter'
+// import Test from './Test';
 
 class App extends Component {
 
@@ -63,6 +64,7 @@ class App extends Component {
         return (
           <ErrorBoundary key={index}>
             <Car
+              index={index}
               name={car.name}
               year={car.year}
               onDelete={this.deleteHandler.bind(this, index)}
@@ -94,6 +96,12 @@ class App extends Component {
         }}>
           { cars }
         </div>
+        {/*<hr/>*/}
+        {/*<div>*/}
+        {/*  <Test name={'First'} />*/}
+        {/*  <Test name={'Second'} age={7} />*/}
+        {/*  <Test age={5} />*/}
+        {/*</div>*/}
       </div>
     );
   }

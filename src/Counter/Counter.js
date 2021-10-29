@@ -39,9 +39,9 @@ export default class Counter extends Component {
       return (
           <Auxiliary>
               <h2>Counter {this.state.counter}</h2>
+              <button style={{minWidth: '40px', margin: '10px 10px'}} onClick={this.addCounter}>+</button>
+              <button style={{minWidth: '40px', margin: '0px 10px'}} onClick={() => this.setState({counter: this.state.counter - 1})}>-</button>
               <Counter2 />
-              <button onClick={this.addCounter}>+</button>
-              <button onClick={() => this.setState({counter: this.state.counter - 1})}>-</button>
           </Auxiliary>
       )
   }

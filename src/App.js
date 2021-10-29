@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import './App.scss'
-import Car from './Car/Car'
-import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
 import Counter from './Counter/Counter'
-// import Test from './Test';
+import Cars from './Cars';
 
 export const ClickedContext = React.createContext(false);
 
@@ -20,7 +18,8 @@ class App extends Component {
         {name: 'Mazda', year: 2010}
       ],
       pageTitle: 'React components',
-      showCars: false
+      showCars: false,
+      showCounters: false,
     }
   }
 
@@ -30,84 +29,55 @@ class App extends Component {
     })
   }
 
+  toggleCountersHandler = () => {
+    this.setState({
+      showCounters: !this.state.showCounters
+    })
+  }
+
   onChangeName(name, index) {
-    const car = this.state.cars[index]
-    car.name = name
-    const cars = [...this.state.cars]
-    cars[index] = car
-    this.setState({cars})
+    const car = this.state.cars[index];
+    car.name = name;
+    const cars = [...this.state.cars];
+    cars[index] = car;
+    this.setState({cars});
   }
 
   deleteHandler(index) {
-    const cars = this.state.cars.concat()
-    cars.splice(index, 1)
-
-    this.setState({cars})
-
+    const cars = this.state.cars.concat();
+    cars.splice(index, 1);
+    this.setState({cars});
   }
 
-  componentWillMount() {
-    console.log('App componentWillMount')
-  }
-
-  componentDidMount() {
-    console.log('App componentDidMount')
-  }
 
   render() {
-    console.log('App render')
     const divStyle = {
       textAlign: 'center'
     }
 
-    let cars = null
-
-    if (this.state.showCars) {
-      cars = this.state.cars.map((car, index) => {
-        return (
-          <ErrorBoundary key={index}>
-            <Car
-              index={index}
-              name={car.name}
-              year={car.year}
-              onDelete={this.deleteHandler.bind(this, index)}
-              onChangeName={event => this.onChangeName(event.target.value, index)}
-            />
-          </ErrorBoundary>
-        )
-      })
-    }
-
     return (
       <div style={divStyle}>
-        {/*<h1>{this.state.pageTitle}</h1>*/}
         <h1>{this.props.title}</h1>
-        <ClickedContext.Provider value={this.state.clicked}>
-          <Counter />
-        </ClickedContext.Provider>
+        <hr/>
+        <button style={{margin: '10px 0'}} className={'AppButton'} onClick={this.toggleCountersHandler} >Toggle Counters</button>
+        {this.state.showCounters && <div>
+          <ClickedContext.Provider value={this.state.clicked}>
+            <Counter />
+          </ClickedContext.Provider>
+          <button onClick={() => this.setState({clicked: true})}>Change Clicked</button>
+        </div>}
 
         <hr/>
-        <button
-          style={{marginTop: 20}}
-          className={'AppButton'}
-          onClick={this.toggleCarsHandler}
-        >Toggle cars</button>
-
-        <button onClick={() => this.setState({clicked: true})}>Change Clicked</button>
-
-        <div style={{
-          width: 400,
-          margin: 'auto',
-          paddingTop: '20px'
-        }}>
-          { cars }
+        <button style={{margin: '10px 0'}} className={'AppButton'} onClick={this.toggleCarsHandler} >Toggle cars</button>
+        <div style={{width: 400, margin: 'auto'}}>
+          <Cars
+              data={this.state.cars}
+              showCars={this.state.showCars}
+              deleteHandler={this.deleteHandler.bind(this)}
+              onChangeName={this.onChangeName.bind(this)}
+          />
         </div>
-        {/*<hr/>*/}
-        {/*<div>*/}
-        {/*  <Test name={'First'} />*/}
-        {/*  <Test name={'Second'} age={7} />*/}
-        {/*  <Test age={5} />*/}
-        {/*</div>*/}
+        <hr/>
       </div>
     );
   }

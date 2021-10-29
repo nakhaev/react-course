@@ -8,7 +8,7 @@ import {BrowserRouter} from 'react-router-dom';
 ReactDOM.render(
   <React.StrictMode>
       <BrowserRouter>
-          <App title={'I am from props!'}/>
+          <App title={'React Learning'}/>
       </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

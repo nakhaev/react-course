@@ -12,3 +12,28 @@
     background: #f0ff1e;
   }
 }
+
+nav {
+  ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 20px;
+    li {
+      margin-right: 15px;
+      a {
+        text-decoration: none;
+        &.active {
+          font-weight: bold;
+          color: red;
+        }
+        &.custom-active {
+          font-weight: bold;
+          color: green;
+        }
+      }
+    }
+  }
+}

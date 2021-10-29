@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
+import { Route, NavLink } from 'react-router-dom';
+
 import './App.scss'
 import Counter from './Counter/Counter'
 import Cars from './Cars';
+import Home from './Home';
+import About from './About';
 
 export const ClickedContext = React.createContext(false);
 
@@ -12,41 +16,16 @@ class App extends Component {
 
     this.state = {
       clicked: false,
-      cars: [
-        {name: 'Ford', year: 2018},
-        {name: 'Audi', year: 2016},
-        {name: 'Mazda', year: 2010}
-      ],
       pageTitle: 'React components',
-      showCars: false,
       showCounters: false,
     }
   }
 
-  toggleCarsHandler = () => {
-    this.setState({
-      showCars: !this.state.showCars
-    })
-  }
 
   toggleCountersHandler = () => {
     this.setState({
       showCounters: !this.state.showCounters
     })
-  }
-
-  onChangeName(name, index) {
-    const car = this.state.cars[index];
-    car.name = name;
-    const cars = [...this.state.cars];
-    cars[index] = car;
-    this.setState({cars});
-  }
-
-  deleteHandler(index) {
-    const cars = this.state.cars.concat();
-    cars.splice(index, 1);
-    this.setState({cars});
   }
 
 
@@ -55,10 +34,8 @@ class App extends Component {
       textAlign: 'center'
     }
 
-    return (
-      <div style={divStyle}>
-        <h1>{this.props.title}</h1>
-        <hr/>
+    const counters = (
+      <>
         <button style={{margin: '10px 0'}} className={'AppButton'} onClick={this.toggleCountersHandler} >Toggle Counters</button>
         {this.state.showCounters && <div>
           <ClickedContext.Provider value={this.state.clicked}>
@@ -66,18 +43,32 @@ class App extends Component {
           </ClickedContext.Provider>
           <button onClick={() => this.setState({clicked: true})}>Change Clicked</button>
         </div>}
+      </>
+    )
+
+    return (
+      <div style={divStyle}>
+        <h1>{this.props.title}</h1>
+
+        <nav>
+          <ul style={{listStyle: 'none'}}>
+            <li> <NavLink to="/" exact activeClassName={'custom-active'}>Home</NavLink></li>
+            <li><NavLink to="/about" activeStyle={{color: 'blue'}}>About</NavLink></li>
+            <li><NavLink to={{
+                pathname: "/cars",
+                search: "?name=Mazda&sort=year&sort_direction=asc",
+                hash: "#some_hash"
+            }}>Cars</NavLink></li>
+            <li><NavLink to="/counters">Counters</NavLink></li>
+          </ul>
+        </nav>
 
         <hr/>
-        <button style={{margin: '10px 0'}} className={'AppButton'} onClick={this.toggleCarsHandler} >Toggle cars</button>
-        <div style={{width: 400, margin: 'auto'}}>
-          <Cars
-              data={this.state.cars}
-              showCars={this.state.showCars}
-              deleteHandler={this.deleteHandler.bind(this)}
-              onChangeName={this.onChangeName.bind(this)}
-          />
-        </div>
-        <hr/>
+
+        <Route path='/' exact component={Home} />
+        <Route path='/about' exact render={About} />
+        <Route path='/cars' exact component={Cars} />
+        <Route path='/counters' exact component={() => counters} />
       </div>
     );
   }

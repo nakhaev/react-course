@@ -1,10 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 import Car from './Car/Car';
 
 const Cars = (props) => {
-    const {data, showCars, deleteHandler, onChangeName} = props;
+
+    const [data, setData] = useState([
+        {name: 'Ford', year: 2018},
+        {name: 'Audi', year: 2016},
+        {name: 'Mazda', year: 2010}
+    ]);
+
+    const [showCars, setShowCars] = useState(false);
+
     let cars = null
+
+    const onChangeName = (name, index) => {
+        const cars = [...data];
+        cars[index].name = name;
+        setData(cars);
+    }
+
+    const deleteHandler = (index) => {
+        const cars = [ ...data];
+        cars.splice(index, 1);
+        setData(cars);
+    }
+
+
+    const toggleCarsHandler = () => {
+        setShowCars(prevState => {
+            return !prevState;
+        })
+    }
 
     if (showCars) {
         cars = (data||[]).map((car, index) => {
@@ -22,7 +49,12 @@ const Cars = (props) => {
         })
     }
 
-    return cars;
+    return (
+        <div style={{width: 400, margin: 'auto'}}>
+            <button style={{margin: '10px 0'}} className={'AppButton'} onClick={toggleCarsHandler} >Toggle cars</button>
+            {cars}
+        </div>
+    )
 }
 
 export default Cars;

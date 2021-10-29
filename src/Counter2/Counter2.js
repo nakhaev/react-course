@@ -1,7 +1,7 @@
 import React from 'react';
 import {ClickedContext} from '../App';
 
-export default props => {
+const Counter2 = () => {
     return (
         <div style={{border: '1px solid #ccc', width: '200px', margin: '0 auto'}}>
             <h3>Counter2</h3>
@@ -11,3 +11,5 @@ export default props => {
         </div>
     )
 }
+
+export default Counter2;

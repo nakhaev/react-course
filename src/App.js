@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Route, NavLink, Switch } from 'react-router-dom';
+import { Route, NavLink, Switch, Redirect } from 'react-router-dom';
 
 import './App.scss'
 import Counter from './Counter/Counter'
@@ -19,6 +19,7 @@ class App extends Component {
       clicked: false,
       pageTitle: 'React components',
       showCounters: false,
+      isLoggedIn: false
     }
   }
 
@@ -65,14 +66,19 @@ class App extends Component {
         </nav>
 
         <hr/>
+          <h3>Is Logged In: {this.state.isLoggedIn.toString()}</h3>
+          <button onClick={() => this.setState({isLoggedIn: true})}>LogIn</button>
+        <hr/>
 
-          <Switch>
-              <Route path='/' exact component={Home} />
-              <Route path='/about' render={About} />
-              <Route path='/counters' component={() => counters} />
-              <Route path='/cars/:name' component={CarDetail} />
-              <Route path='/cars' component={Cars} />
-          </Switch>
+        <Switch>
+            <Route path='/' exact component={Home} />
+            {this.state.isLoggedIn ? <Route path='/about' component={About} /> : null } {/* только если пользователь вошел в систему (приватный роут) */}
+            <Route path='/counters' render={() => counters} />
+            <Route path='/cars/:name' component={CarDetail} />
+            <Route path='/cars' component={Cars} />
+            <Redirect to={'/'} /> {/*сработает если не найдет совпадения пути*/}
+            <Route render={() => <h1>404 not found</h1>}/> {/*сработает если не найдет совпадения пути и если убрать редирект*/}
+        </Switch>
       </div>
     );
   }

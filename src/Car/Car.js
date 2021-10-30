@@ -1,48 +1,42 @@
-import React, {createRef} from 'react'
+import React, {useRef, useEffect} from 'react'
 import PropTypes from 'prop-types';
 import './Car.css'
 import withClass from '../HOC/withClass';
+import {withRouter} from 'react-router-dom';
 
-class Car extends React.Component {
-    constructor(props) {
-        super(props);
+const Car = props => {
+    const inputRef = useRef(null);
 
-        this.inputRef = createRef();
-    }
-
-    componentDidMount() {
-        if(this.props.index === 1) this.inputRef.current.focus();
-    }
-
-  render() {
+    useEffect(() => {
+        if(props.index === 1) inputRef.current.focus();
+    }, []);
 
     const inputClasses = ['input']
 
-    if (this.props.name !== '') {
+    if (props.name !== '') {
       inputClasses.push('green')
     } else {
       inputClasses.push('red')
     }
 
-    if (this.props.name.length > 4) {
+    if (props.name.length > 4) {
       inputClasses.push('bold')
     }
 
     return (
-      <>
-        <h3>Сar name: {this.props.name}</h3>
-        <p>Year: <strong>{this.props.year}</strong></p>
+      <div onClick={() => props.history.push(`/cars/${props.name.toLowerCase()}`)}>
+        <h3>Сar name: {props.name}</h3>
+        <p>Year: <strong>{props.year}</strong></p>
         <input
           type="text"
-          ref={this.inputRef}
-          onChange={this.props.onChangeName}
-          value={this.props.name}
+          ref={inputRef}
+          onChange={props.onChangeName}
+          value={props.name}
           className={inputClasses.join(' ')}
         />
-        <button onClick={this.props.onDelete}>Delete</button>
-      </>
+        <button onClick={props.onDelete}>Delete</button>
+      </div>
     )
-  }
 }
 
 Car.propTypes = {
@@ -53,4 +47,4 @@ Car.propTypes = {
     onDelete: PropTypes.func
 }
 
-export default withClass(Car, 'Car');
+export default withRouter(withClass(Car, 'Car'));

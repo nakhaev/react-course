@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { Route, NavLink } from 'react-router-dom';
+import { Route, NavLink, Switch } from 'react-router-dom';
 
 import './App.scss'
 import Counter from './Counter/Counter'
 import Cars from './Cars';
 import Home from './Home';
 import About from './About';
+import CarDetail from './CarDetail';
 
 export const ClickedContext = React.createContext(false);
 
@@ -52,7 +53,7 @@ class App extends Component {
 
         <nav>
           <ul style={{listStyle: 'none'}}>
-            <li> <NavLink to="/" exact activeClassName={'custom-active'}>Home</NavLink></li>
+            <li><NavLink to="/" exact activeClassName={'custom-active'}>Home</NavLink></li>
             <li><NavLink to="/about" activeStyle={{color: 'blue'}}>About</NavLink></li>
             <li><NavLink to={{
                 pathname: "/cars",
@@ -65,10 +66,13 @@ class App extends Component {
 
         <hr/>
 
-        <Route path='/' exact component={Home} />
-        <Route path='/about' exact render={About} />
-        <Route path='/cars' exact component={Cars} />
-        <Route path='/counters' exact component={() => counters} />
+          <Switch>
+              <Route path='/' exact component={Home} />
+              <Route path='/about' render={About} />
+              <Route path='/counters' component={() => counters} />
+              <Route path='/cars/:name' component={CarDetail} />
+              <Route path='/cars' component={Cars} />
+          </Switch>
       </div>
     );
   }

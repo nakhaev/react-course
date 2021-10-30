@@ -4,13 +4,15 @@ import Car from './Car/Car';
 
 const Cars = (props) => {
 
+    const {history} = props;
+
     const [data, setData] = useState([
         {name: 'Ford', year: 2018},
         {name: 'Audi', year: 2016},
         {name: 'Mazda', year: 2010}
     ]);
 
-    const [showCars, setShowCars] = useState(false);
+    const [showCars, setShowCars] = useState(true);
 
     let cars = null
 
@@ -33,6 +35,10 @@ const Cars = (props) => {
         })
     }
 
+    const goToHome = () => {
+        history.push({pathname: '/', search: '?try=to&add=queries', hash: '#check'})
+    }
+
     if (showCars) {
         cars = (data||[]).map((car, index) => {
             return (
@@ -48,9 +54,9 @@ const Cars = (props) => {
             )
         })
     }
-
     return (
         <div style={{width: 400, margin: 'auto'}}>
+            <button style={{margin: '10px 0'}} className={'AppButton'} onClick={goToHome} >Back to home</button>
             <button style={{margin: '10px 0'}} className={'AppButton'} onClick={toggleCarsHandler} >Toggle cars</button>
             {cars}
         </div>

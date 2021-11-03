@@ -36,6 +36,9 @@ const Auth = props => {
             }
         }
     });
+
+    const [isFormValid, setIsFormValid] = useState(false);
+
     const signInHandler = () => {
         console.log('Sign In');
     };
@@ -65,6 +68,7 @@ const Auth = props => {
         return isValid;
     }
     const onChangeHandler = (event, controlName) => {
+        let isFormValid = true;
         const controls = { ...formControls};
         const control = { ...controls[controlName]};
 
@@ -72,9 +76,16 @@ const Auth = props => {
         control.touched = true;
         control.valid = validateControl(control.value, control.validation);
 
-        setFormControls((prevState) => {
-            return { ...prevState, [controlName]: control}
+        controls[controlName] = control;
+
+        setFormControls({ ...controls});
+
+        Object.keys(controls).map(key => {
+            if(!controls[key].valid) isFormValid = false;
+            return key;
         })
+
+        setIsFormValid(isFormValid);
     }
     const renderInputs = () => {
         return Object.keys(formControls).map((controlName, index) => {
@@ -101,12 +112,14 @@ const Auth = props => {
                     <Button
                         type="success"
                         onClick={signInHandler}
+                        disabled={!isFormValid}
                     >
                         Sign In
                     </Button>
                     <Button
                         type="primary"
                         onClick={signUpHandler}
+                        disabled={!isFormValid}
                     >
                         Sign Up
                     </Button>

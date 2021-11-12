@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import classes from './Quiz.module.css'
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz';
 import FinishedQuiz from '../../components/FinishedQuiz/FinishedQuiz';
+import axios from '../../axios/axios-quiz';
 
 class Quiz extends Component {
     state = {
@@ -9,29 +10,17 @@ class Quiz extends Component {
         isFinished: false,
         activeQuestion: 0,
         answerState: null,
-        quiz: [
-            {
-                question: 'What the color of sky?',
-                rightAnswerId: 3,
-                id: 1,
-                answers: [
-                    { text: 'White', id: 1 },
-                    { text: 'Black', id: 2 },
-                    { text: 'Blue', id: 3 },
-                    { text: 'Red', id: 4},
-                ]
-            },
-            {
-                question: 'What the color of blood?',
-                rightAnswerId: 2,
-                id: 2,
-                answers: [
-                    { text: 'Green', id: 1 },
-                    { text: 'Red', id: 2},
-                    { text: 'Blue', id: 3 },
-                ]
-            }
-        ]
+        quiz: []
+    }
+
+    async componentDidMount() {
+        const id = this.props.match.params.id;
+        try {
+            const response = await axios.get('/quizzes/'+id+'.json');
+            this.setState({quiz: response.data});
+        } catch(error) {
+            console.log('error', error);
+        }
     }
 
     onAnswerClickHandler = (id) => {
@@ -105,15 +94,17 @@ class Quiz extends Component {
                                 />
                             </> :
                             <>
-                                <h1>Please, answer all questions</h1>
-                                <ActiveQuiz
-                                answers={ this.state.quiz[this.state.activeQuestion].answers}
-                                question={ this.state.quiz[this.state.activeQuestion].question}
-                                onAnswerClick={this.onAnswerClickHandler}
-                                questionsLength={this.state.quiz.length}
-                                questionNumber={this.state.activeQuestion + 1}
-                                answerState={this.state.answerState}
-                                />
+                            {this.state.quiz[this.state.activeQuestion] ? <>
+                                    <h1>Please, answer all questions</h1>
+                                    <ActiveQuiz
+                                    answers={ this.state.quiz[this.state.activeQuestion].answers}
+                                    question={ this.state.quiz[this.state.activeQuestion].question}
+                                    onAnswerClick={this.onAnswerClickHandler}
+                                    questionsLength={this.state.quiz.length}
+                                    questionNumber={this.state.activeQuestion + 1}
+                                    answerState={this.state.answerState}
+                                    />
+                                </> : null}
                             </>
                     }
 

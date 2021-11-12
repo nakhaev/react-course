@@ -4,6 +4,8 @@ import Button from '../../components/UI/Button/Button';
 import {createControl, validate, validateForm} from '../../form/formFramework';
 import Input from '../../components/UI/Input/Input';
 import Select from '../../components/UI/Select/Select';
+import axios from 'axios';
+import config from '../../config';
 
 function createOptionControl(number) {
     const config = {
@@ -26,7 +28,7 @@ function createFormControls() {
     };
 }
 
-const QuizCreator = props => {
+const QuizCreator = () => {
     const [quiz, setQuiz] = useState([]);
     const [isFormValid, setIsFormValid] = useState(false);
     const [rightAnswerId, setRightAnswerId] = useState("1");
@@ -58,9 +60,26 @@ const QuizCreator = props => {
         setIsFormValid(false);
     }
 
-    const createQuizHandler = event => {
+    const createQuizHandler = async event => {
         event.preventDefault();
-        console.log('quiz', quiz);
+        // promise
+
+        // axios.post(config.apiUrl+'/quizzes.json', quiz)
+        //     .then(success => {
+        //         console.log('success', success);
+        //     })
+        //     .catch(error => {
+        //         console.log('error', error);
+        //     });
+
+        // async /await
+        try {
+            const response = await axios.post(config.apiUrl+'/quizzes.json', quiz);
+            console.log('response', response.data);
+            setQuiz([]);
+        } catch(error) {
+            console.log('error', error);
+        }
     }
     const onChangeHandler = (value, controlName) => {
         const controls = { ...formControls};

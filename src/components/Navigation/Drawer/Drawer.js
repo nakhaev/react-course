@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 const links = [
     {to: '/', title: 'Quiz List', exact: true},
-    {to: 'quiz-creator', title: 'Quiz Creator', exact: false},
+    {to: '/quiz-creator', title: 'Quiz Creator', exact: false},
     {to: '/auth', title: 'Auth', exact: false}
 ]
 

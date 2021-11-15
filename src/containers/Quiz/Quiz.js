@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import classes from './Quiz.module.css'
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz';
 import FinishedQuiz from '../../components/FinishedQuiz/FinishedQuiz';
+import Loader from '../../components/UI/Loader/Loader';
 import axios from '../../axios/axios-quiz';
 
 class Quiz extends Component {
@@ -10,7 +11,8 @@ class Quiz extends Component {
         isFinished: false,
         activeQuestion: 0,
         answerState: null,
-        quiz: []
+        quiz: [],
+        loading: true
     }
 
     async componentDidMount() {
@@ -18,6 +20,7 @@ class Quiz extends Component {
         try {
             const response = await axios.get('/quizzes/'+id+'.json');
             this.setState({quiz: response.data});
+            this.setState({loading: false})
         } catch(error) {
             console.log('error', error);
         }
@@ -84,28 +87,28 @@ class Quiz extends Component {
             <div className={classes.Quiz}>
                 <div className={classes.QuizWrapper}>
                     {
-                        this.state.isFinished ?
-                            <>
-                                <h1>All answers:</h1>
-                                <FinishedQuiz
-                                    results={this.state.results}
-                                    quiz={this.state.quiz}
-                                    onRetry={this.onRetryHandler}
-                                />
-                            </> :
-                            <>
-                            {this.state.quiz[this.state.activeQuestion] ? <>
+                        this.state.loading
+                        ? <Loader />
+                        : this.state.isFinished ?
+                                <>
+                                    <h1>All answers:</h1>
+                                    <FinishedQuiz
+                                        results={this.state.results}
+                                        quiz={this.state.quiz}
+                                        onRetry={this.onRetryHandler}
+                                    />
+                                </> :
+                                <>
                                     <h1>Please, answer all questions</h1>
                                     <ActiveQuiz
-                                    answers={ this.state.quiz[this.state.activeQuestion].answers}
-                                    question={ this.state.quiz[this.state.activeQuestion].question}
-                                    onAnswerClick={this.onAnswerClickHandler}
-                                    questionsLength={this.state.quiz.length}
-                                    questionNumber={this.state.activeQuestion + 1}
-                                    answerState={this.state.answerState}
+                                        answers={ this.state.quiz[this.state.activeQuestion].answers}
+                                        question={ this.state.quiz[this.state.activeQuestion].question}
+                                        onAnswerClick={this.onAnswerClickHandler}
+                                        questionsLength={this.state.quiz.length}
+                                        questionNumber={this.state.activeQuestion + 1}
+                                        answerState={this.state.answerState}
                                     />
-                                </> : null}
-                            </>
+                                </>
                     }
 
                 </div>

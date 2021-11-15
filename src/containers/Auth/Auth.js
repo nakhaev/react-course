@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import classes from './Auth.module.css';
 import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
+import axios from 'axios';
+import config from '../../config';
 
 
 function validEmail(email) {
@@ -9,7 +11,7 @@ function validEmail(email) {
     return re.test(email);
 }
 
-const Auth = props => {
+const Auth = () => {
     const [formControls, setFormControls] = useState({
         email: {
             value: '',
@@ -39,11 +41,33 @@ const Auth = props => {
 
     const [isFormValid, setIsFormValid] = useState(false);
 
-    const signInHandler = () => {
-        console.log('Sign In');
+    const signInHandler = async () => {
+        const authData = {
+            email: formControls.email.value,
+            password: formControls.password.value,
+            returnSecureToken: true
+        }
+        try {
+            const response = await axios.post(config.signinEndpoint, authData);
+            console.log('[Auth Success]: ', response.data);
+
+        } catch(error) {
+            console.log('[Auth Error]: ', error);
+        }
     };
-    const signUpHandler = () => {
-        console.log('Sign Up');
+    const signUpHandler = async () => {
+        const authData = {
+            email: formControls.email.value,
+            password: formControls.password.value,
+            returnSecureToken: true
+        }
+        try {
+            const response = await axios.post(config.signupEndpoint, authData);
+            console.log('[Auth Success]: ', response.data);
+
+        } catch(error) {
+            console.log('[Auth Error]: ', error);
+        }
     };
     const submitHandler = (e) => {
         e.preventDefault();

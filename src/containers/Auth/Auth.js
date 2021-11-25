@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setData } from '../../appSlice'
 import classes from './Auth.module.css';
 import Button from '../../components/UI/Button/Button';
 import Input from '../../components/UI/Input/Input';
@@ -39,6 +41,10 @@ const Auth = () => {
         }
     });
 
+    const user = useSelector(state => state.app.user );
+    console.log('user', user);
+    const dispatch = useDispatch();
+
     const [isFormValid, setIsFormValid] = useState(false);
 
     const signInHandler = async () => {
@@ -50,6 +56,7 @@ const Auth = () => {
         try {
             const response = await axios.post(config.signinEndpoint, authData);
             console.log('[Auth Success]: ', response.data);
+            dispatch(setData({user: response.data}));
 
         } catch(error) {
             console.log('[Auth Error]: ', error);

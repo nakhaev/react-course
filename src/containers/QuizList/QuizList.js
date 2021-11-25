@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import classes from './QuizList.module.css';
 import { NavLink } from 'react-router-dom';
 import Loader from '../../components/UI/Loader/Loader';
 import axios from '../../axios/axios-quiz';
+import { useSelector, useDispatch } from 'react-redux';
+import { setQuizzes, setLoading } from './quizListSlice';
 
 const QuizList = () => {
-    const [quizzes, setQuizzes] = useState([]);
-    const [loading, setLoading] = useState(true);
+
+    const { quizzes, loading } = useSelector(state => state.quizList);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         async function getQuizzes() {
@@ -21,8 +24,8 @@ const QuizList = () => {
                     })
                     return key;
                 })
-                setQuizzes(temp);
-                setLoading(false);
+                dispatch(setQuizzes(temp));
+                dispatch(setLoading(false));
             } catch(error) {
                 console.log('error', error);
             }
@@ -39,8 +42,7 @@ const QuizList = () => {
                     :  <ul>
                             {(quizzes || []).map((q, index) => {
                                 return <li key={index}><NavLink to={'/quiz/'+q.id}> {q.name} </NavLink></li>
-                            })
-                            }
+                            })}
                         </ul>
                 }
             </div>

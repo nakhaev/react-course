@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Route, NavLink, Switch, Redirect } from 'react-router-dom';
+import {connect} from 'react-redux';
 
 import './App.scss'
 import Counter from './Counter/Counter'
@@ -7,6 +8,7 @@ import Cars from './Cars';
 import Home from './Home';
 import About from './About';
 import CarDetail from './CarDetail';
+import Counter3 from './Counter3/Counter3';
 
 export const ClickedContext = React.createContext(false);
 
@@ -44,6 +46,7 @@ class App extends Component {
             <Counter />
           </ClickedContext.Provider>
           <button onClick={() => this.setState({clicked: true})}>Change Clicked</button>
+            <Counter3 />
         </div>}
       </>
     )
@@ -84,4 +87,13 @@ class App extends Component {
   }
 }
 
-export default App
+export default connect(
+    state => ({
+        counter: state.counter,
+    }),
+    dispatch => ({
+        add: () => dispatch({type: 'ADD'}),
+        sub: () => dispatch({type: 'SUB'}),
+        set: () => dispatch({type: 'SET', payload: 20}),
+    })
+)(App);

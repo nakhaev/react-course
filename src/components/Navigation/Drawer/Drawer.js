@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import classes from './Drawer.module.css';
 import BackDrop from '../../UI/BackDrop/BackDrop';
 import { NavLink } from 'react-router-dom';
@@ -9,14 +9,14 @@ const links = [
     {to: '/auth', title: 'Auth', exact: false}
 ]
 
-class Drawer extends Component {
-    renderLinks() {
+const Drawer = props => {
+    const renderLinks = () => {
         return links.map((link, index) => {
             return (
                 <li key={index}>
                     <NavLink
                         to={link.to}
-                        onClick={this.props.onClose}
+                        onClick={props.onClose}
                         exact={link.exact}
                         activeClassName={classes.active}
                     >
@@ -27,22 +27,20 @@ class Drawer extends Component {
         })
     }
 
-    render() {
-        const {isOpen, onClose} = this.props;
+    const {isOpen, onClose} = props;
 
-        const cls = [classes.Drawer];
-        if(!isOpen) cls.push(classes.close);
-        return (
-            <>
-                {isOpen && <BackDrop onClick={onClose}/>}
-                <nav className={cls.join(' ')}>
-                    <ul>
-                        {this.renderLinks()}
-                    </ul>
-                </nav>
-            </>
-        )
-    }
+    const cls = [classes.Drawer];
+    if(!isOpen) cls.push(classes.close);
+    return (
+        <>
+            {isOpen && <BackDrop onClick={onClose}/>}
+            <nav className={cls.join(' ')}>
+                <ul>
+                    {renderLinks()}
+                </ul>
+            </nav>
+        </>
+    )
 }
 
 export default Drawer;

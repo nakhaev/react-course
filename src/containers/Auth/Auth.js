@@ -41,7 +41,7 @@ const Auth = () => {
         }
     });
 
-    const user = useSelector(state => state.app.user );
+    const { user } = useSelector(state => state.app );
     console.log('user', user);
     const dispatch = useDispatch();
 

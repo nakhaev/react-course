@@ -1,32 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import classes from './Quiz.module.css'
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz';
 import FinishedQuiz from '../../components/FinishedQuiz/FinishedQuiz';
 import Loader from '../../components/UI/Loader/Loader';
 import axios from '../../axios/axios-quiz';
+import {useDispatch, useSelector} from "react-redux";
+import {setLoading, setQuiz, setAnswerState, setActiveQuestion, setResults, setIsFinished, setData} from "./quizSlice";
 
 const Quiz = props => {
 
-    const [results, setResults] = useState({});
-    const [isFinished, setIsFinished] = useState(false);
-    const [activeQuestion, setActiveQuestion] = useState(0);
-    const [answerState, setAnswerState] = useState(null);
-    const [quiz, setQuiz] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch();
+    const {results, isFinished, activeQuestion, answerState, quiz, loading} = useSelector(state => state.quiz);
 
     useEffect(() => {
         const getQuiz = async () => {
             const id = props.match.params.id;
             try {
                 const response = await axios.get('/quizzes/'+id+'.json');
-                setQuiz(response.data);
-                setLoading(false)
+                dispatch(setQuiz(response.data));
+                dispatch(setLoading(false));
             } catch(error) {
                 console.log('error', error);
             }
         }
         getQuiz();
-    })
+    }, []);
 
     const onAnswerClickHandler = (id) => {
         if(answerState) {
@@ -43,37 +41,34 @@ const Quiz = props => {
             if(!currentResults[question.id]) {
                 currentResults[question.id] = 'success';
             }
-            setResults(currentResults);
+            dispatch(setResults(currentResults));
 
             currentState[id] = 'success';
-            setAnswerState(currentState);
+            dispatch(setAnswerState(currentState));
 
             nextQuestion();
         } else {
             currentResults[question.id] = 'error';
-            setResults(currentResults);
+            dispatch(setResults(currentResults));
 
             currentState[id] = 'error';
-            setAnswerState(currentState);
+            dispatch(setAnswerState(currentState));
 
             nextQuestion();
         }
     }
 
     const onRetryHandler = () => {
-        setResults({});
-        setIsFinished(false);
-        setActiveQuestion(0);
-        setAnswerState(null);
+        dispatch(setData({results: {}, isFinished: false, activeQuestion: 0, answerState: null}))
     }
 
     const nextQuestion = () => {
         const timeout = window.setTimeout(() => {
             if(isQuizFinished()) {
-                setIsFinished(true);
+                dispatch(setIsFinished(true));
             } else {
-                setActiveQuestion(activeQuestion + 1);
-                setAnswerState(null);
+                dispatch(setActiveQuestion(activeQuestion + 1));
+                dispatch(setAnswerState(null));
             }
             window.clearTimeout(timeout);
         }, 1000);
